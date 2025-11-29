@@ -9,9 +9,8 @@ import horoscopeRoutes from "./routes/horoscopeRoutes.js";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 4000;
 
-
+// CORS
 app.use(
   cors({
     origin: "*",
@@ -20,19 +19,21 @@ app.use(
   })
 );
 
-// Extra fix untuk preflight
+// Preflight fix
 app.options("*", cors());
 
 app.use(express.json());
 
+// Root test
 app.get("/", (req, res) => {
   res.json({ message: "ZodiakKu API is running" });
 });
 
+// Routes
 app.use("/api/v1/zodiacs", zodiacRoutes);
 app.use("/api/v1/horoscopes", horoscopeRoutes);
 
-// fallback 404
+// Fallback 404
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -40,6 +41,5 @@ app.use((req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// ❗ WAJIB untuk Vercel – JANGAN pakai app.listen()
+export default app;
